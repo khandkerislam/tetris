@@ -119,23 +119,38 @@ function findCollisionZoneBottom(piece){
 
     let collisions = [];
     let searchY = setCurrentY(piece);
-    console.log('collision y',searchY);
+    console.log('searchY in collision',searchY);
     let searchX = currentX;
+
+    //we should rewrite this, its awful.
+    //we have established the currentY
+    //we want the loop to go in columns.
+    //if its a one, get the row number and subtract that from the currentY
+    //so lets say we find one at 2,1.  the current y is 2. so now what...
+    //well how bout we find one at 0,0.  if current y is 2, we want to mark 0 as the correct y location.
+    //so...lets say we are actually searching by columns.  if its a zero and l
     
     for(i = 0; i < piece.length; i++){
-        for(l = piece.length-1; l >= piece.length-2; l--){
+        for(l = piece.length-1; l >= 0; l--){
             if(piece[l][i] && l == piece.length-1){
+                console.log('hit here',l,i)
+                console.log("end searchY",searchY);
                 collisions.push({x:searchX, y:searchY});
             }
             else if(l == piece.length-2 && piece[l][i]+piece[l+1][i] == 1){
+                console.log('hit here',l,i)
+                console.log("penultimate, searchY",searchY);
                 collisions.push({x:searchX, y:searchY});
             }
+            console.log('out of loop: l,i',l,i)
+            console.log('Before decrement of searchY',searchY)
             searchY--;
+            console.log('After decrement of searchY',searchY)
         }
         searchX++;
         searchY=currentY;
     }
-    console.table(collisions)
+    //console.table(collisions)
     return collisions
 }
 
@@ -151,9 +166,6 @@ function newPiece(x,y,piece){
             }
         }
     }
-    console.table(board);
-    console.log(currentY);
-    
 }
 
 function moveDown(piece){
@@ -240,7 +252,6 @@ function drop(){
     let delta = now - dropStart;
     if(delta > 1000){
         dropStart = Date.now();
-        moveDown(currentPiece);
     }
     if( !gameOver){
         requestAnimationFrame(drop);
@@ -251,7 +262,7 @@ function drop(){
 newPiece(4,0,tblock);
 //findCollisionZoneBottom(currentPiece);
 //clearPiece(currentPiece,MIDPOINT,0);
-//moveDown(currentPiece);
+moveDown(currentPiece);
+moveDown(currentPiece);
 //findCollisionZoneRight(currentPiece);
 //findCollisionZoneLeft(currentPiece);
-drop();
